@@ -8,7 +8,7 @@
  */
 
 import { supabaseAdmin, handleSupabaseError } from './_client';
-import { Ingress } from '@/lib/session';
+import { Ingress } from '@/lib/api/session';
 
 
 export type MonkeyUser = {

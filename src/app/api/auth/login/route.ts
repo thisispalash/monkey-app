@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { verifyUser } from '@/lib/supabase/user';
 import { storeRefreshToken } from '@/lib/supabase/session';
 import { generateAccessToken, generateRefreshToken } from '@/lib/session';
-import { getIngress } from '@/lib/http';
+import { getIngress } from '@/lib/api/http';
 
 import type { MonkeyUser } from '@/lib/supabase/user';
 import type { User, Ingress } from '@/lib/session';
