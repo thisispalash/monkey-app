@@ -4,6 +4,8 @@ import './globals.css';
 
 import cn from '@/lib/cn';
 
+import ClientLayout from '@/component/ClientLayout';
+
 const syneMono = Syne_Mono({
   variable: '--font-default',
   weight: ['400'],
@@ -30,7 +32,9 @@ export default function RootLayout({
           'antialiased',
         )}
       >
-        {children}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
