@@ -37,7 +37,7 @@ export default function AuthPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await login({ username, password });
+      await login({ username, password });
       router.push('/home');
     } catch (error) {
       console.error('login', error);
@@ -51,7 +51,7 @@ export default function AuthPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await register({ username, password });
+      await register({ username, password });
       router.push('/onboard');
     } catch (error) {
       console.error('signup', error);

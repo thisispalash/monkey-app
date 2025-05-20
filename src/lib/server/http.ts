@@ -1,4 +1,4 @@
-import type { Ingress } from '@/lib/session';
+import type { Ingress } from '@/lib/server/session';
 
 export function getIngress(userAgent: string): Ingress {
 

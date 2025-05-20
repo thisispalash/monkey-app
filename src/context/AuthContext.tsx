@@ -21,25 +21,25 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const [ user, setUser ] = useState<MonkeyUser | null>(null);
 
-  const getAccessToken = async () => {
-    const tokens = await getTokens();
+  // const getAccessToken = async () => {
+  //   const tokens = await getTokens();
 
-    if (!tokens) return null;
+  //   if (!tokens) return null;
 
-    const { accessToken } = tokens;
+  //   const { accessToken } = tokens;
 
-    return accessToken;
-  }
+  //   return accessToken;
+  // }
 
-  const getRefreshToken = async () => {
-    const tokens = await getTokens();
+  // const getRefreshToken = async () => {
+  //   const tokens = await getTokens();
 
-    if (!tokens) return null;
+  //   if (!tokens) return null;
 
-    const { refreshToken } = tokens;
+  //   const { refreshToken } = tokens;
 
-    return refreshToken;
-  }
+  //   return refreshToken;
+  // }
 
   useEffect(() => {
 
@@ -61,7 +61,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 
     checkAuth();
 
-  }, []);
+  }, [router]);
 
 
 

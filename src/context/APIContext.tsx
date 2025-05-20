@@ -55,16 +55,16 @@ export default function APIProvider({ children }: { children: React.ReactNode })
       const data = response.data;
       await setTokens(
         params.username,
-        // @ts-ignore
+        // @ts-expect-error mismatch between types and actual data
         data.accessToken,
-        // @ts-ignore
+        // @ts-expect-error mismatch between types and actual data
         data.refreshToken,
       );
       return data;
     } catch (error) {
       console.error('login', error);
     }
-  }, []);
+  }, [setIsLoggedIn]);
 
   const register = useCallback(async (params: LoginParams) => {
 
@@ -76,12 +76,19 @@ export default function APIProvider({ children }: { children: React.ReactNode })
         { username: params.username, password: hashedPassword }
       );
       const data = response.data;
+      await setTokens(
+        params.username,
+        // @ts-expect-error mismatch between types and actual data
+        data.accessToken,
+        // @ts-expect-error mismatch between types and actual data
+        data.refreshToken,
+      );
       setIsLoggedIn(true);
       return response.data;
     } catch (error) {
       console.error('register', error);
     }
-  }, []);
+  }, [setIsLoggedIn]);
 
   const logout = useCallback(async () => {
     await api.post(API_ROUTES.AUTH.LOGOUT);
