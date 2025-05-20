@@ -1,8 +1,13 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 import cn from '@/lib/cn';
 
-import { LoadingProvider, useLoading } from '@/context/LoadingContext';
+import LoadingProvider, { useLoading } from '@/context/LoadingContext';
+import AuthProvider, { useAuth } from '@/context/AuthContext';
+import APIProvider from '@/context/APIContext';
 
 import Loader from '@/component/Loader';
 
@@ -10,8 +15,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <LoadingProvider>
-      <Loader />
-      <ClientLayoutContent>{children}</ClientLayoutContent>
+      <AuthProvider>
+        <APIProvider>
+          <Loader />
+          <ClientLayoutContent>{children}</ClientLayoutContent>
+        </APIProvider>
+      </AuthProvider>
     </LoadingProvider>
   );
 }
@@ -19,6 +28,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 function ClientLayoutContent({ children }: { children: React.ReactNode }) {
 
   const { isLoading } = useLoading();
+  const { isLoggedIn } = useAuth();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoggedIn) router.push('/');
+  }, [ isLoggedIn ]);
 
   return (
     <main className={cn(
@@ -30,4 +46,4 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
       {children}
     </main>
   );
-}
+} 
