@@ -7,7 +7,7 @@ import { getTokens, setTokens } from '@/lib/client/indexeddb';
 export const API_ROUTES = {
   AUTH: {
     LOGIN: '/auth/login',
-    SIGNUP: '/auth/signup',
+    REGISTER: '/auth/register',
     REFRESH: '/auth/refresh',
     LOGOUT: '/auth/logout',
   },
@@ -53,7 +53,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Handle 401 and token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {

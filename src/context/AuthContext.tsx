@@ -1,18 +1,22 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { MonkeyUser } from '@/lib/supabase/user';
 import { getTokens, getUser } from '@/lib/client/indexeddb';
 
 interface AuthContextType {
   isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
   user: Partial<MonkeyUser> | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthContextProvider({ children }: { children: React.ReactNode }) {
+
+  const router = useRouter();
 
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const [ user, setUser ] = useState<MonkeyUser | null>(null);
@@ -52,6 +56,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
       
       setIsLoggedIn(true);
       setUser(user);
+      router.push('/home');
     }
 
     checkAuth();
@@ -62,7 +67,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 
   return (
     <AuthContext.Provider 
-      value={{ isLoggedIn, user }}>
+      value={{ isLoggedIn, setIsLoggedIn, user }}>
         {children}
     </AuthContext.Provider>
   );

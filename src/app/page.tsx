@@ -1,13 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import cn from '@/lib/cn';
+
+import { useAPI } from '@/context/APIContext';
 
 import TextInput from '@/component/primitive/TextInput';
 import Button from '@/component/primitive/Button';
 
-export default function Auth() {
+export default function AuthPage() {
+
+  const router = useRouter();
+  const { login, register } = useAPI();
 
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
@@ -26,16 +32,32 @@ export default function Auth() {
     return true;
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!preCheck()) return;
     setIsSubmitting(true);
-    console.log('login', username, password);
+
+    try {
+      const response = await login({ username, password });
+      router.push('/home');
+    } catch (error) {
+      console.error('login', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  const handleSignup = () => {
+  const handleRegister = async () => {
     if (!preCheck()) return;
     setIsSubmitting(true);
-    console.log('signup', username, password);
+
+    try {
+      const response = await register({ username, password });
+      router.push('/onboard');
+    } catch (error) {
+      console.error('signup', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -65,8 +87,8 @@ export default function Auth() {
         'flex flex-row gap-4'
       )}>
         
-        <Button onClick={handleSignup} isDisabled={isSubmitting}>
-          Sign up
+        <Button onClick={handleRegister} isDisabled={isSubmitting}>
+          Register
         </Button>
 
         <Button onClick={handleLogin} isDisabled={isSubmitting}>

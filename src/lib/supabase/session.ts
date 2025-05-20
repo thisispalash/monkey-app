@@ -38,7 +38,7 @@ export async function storeRefreshToken(username: string, token: string) {
   const hashed = hashRefreshToken(token);
 
   const { error } = await supabaseAdmin
-    .from('semicolon_sessions')
+    .from('monkey_sessions')
     .insert({ 
       username, 
       token_hash: hashed, 
@@ -53,7 +53,7 @@ export async function revokeRefreshToken(token: string) {
   const hashed = hashRefreshToken(token);
 
   const { error } = await supabaseAdmin
-    .from('semicolon_sessions')
+    .from('monkey_sessions')
     .update({ revoked: true })
     .eq('token_hash', hashed);
 
@@ -66,7 +66,7 @@ export async function refreshRefreshToken(token: string) {
 
   // revoke the old token
   const { error } = await supabaseAdmin
-    .from('semicolon_sessions')
+    .from('monkey_sessions')
     .update({ expires_at: new Date(Date.now() + REFRESH_TOKEN_TTL) })
     .eq('token_hash', hashed);
 

@@ -4,6 +4,10 @@ import { createContext, useContext, useCallback } from 'react';
 import { api, API_ROUTES } from '@/lib/client/axios';
 import type { APIResponse } from '@/lib/client/axios';
 import type { MonkeyUser } from '@/lib/supabase/user';
+import { hashPassword } from '@/lib/server/auth';
+import { setTokens } from '@/lib/client/indexeddb';
+
+import { useAuth } from '@/context/AuthContext';
 
 // Types for API operations
 interface LoginParams {
@@ -20,13 +24,13 @@ interface AuthResponse {
 
 interface APIContextType {
   // Auth operations
-  login: (params: LoginParams) => Promise<APIResponse<AuthResponse>>;
-  signup: (params: LoginParams) => Promise<APIResponse<AuthResponse>>;
+  login: (params: LoginParams) => Promise<APIResponse<AuthResponse> | undefined>;
+  register: (params: LoginParams) => Promise<APIResponse<AuthResponse> | undefined>;
   logout: () => Promise<void>;
   
   // User operations
-  chat: (params: any) => Promise<APIResponse<any>>;
-  upload: (params: any) => Promise<APIResponse<any>>;
+  chat: (params: unknown) => Promise<APIResponse<unknown>>;
+  upload: (params: unknown) => Promise<APIResponse<unknown>>;
   
   // Add other API operations as needed
 }
@@ -34,37 +38,65 @@ interface APIContextType {
 const APIContext = createContext<APIContextType | null>(null);
 
 export default function APIProvider({ children }: { children: React.ReactNode }) {
+  
+  const { setIsLoggedIn } = useAuth();
+
   // Auth operations
   const login = useCallback(async (params: LoginParams) => {
-    const response = await api.post<APIResponse<AuthResponse>>(
-      API_ROUTES.AUTH.LOGIN,
-      params
-    );
-    return response.data;
+
+    const hashedPassword = hashPassword(params.password);
+
+    try {
+      const response = await api.post<APIResponse<AuthResponse>>(
+        API_ROUTES.AUTH.LOGIN,
+        { username: params.username, password: hashedPassword }
+      );
+      setIsLoggedIn(true);
+      const data = response.data;
+      await setTokens(
+        params.username,
+        // @ts-ignore
+        data.accessToken,
+        // @ts-ignore
+        data.refreshToken,
+      );
+      return data;
+    } catch (error) {
+      console.error('login', error);
+    }
   }, []);
 
-  const signup = useCallback(async (params: LoginParams) => {
-    const response = await api.post<APIResponse<AuthResponse>>(
-      API_ROUTES.AUTH.SIGNUP,
-      params
-    );
-    return response.data;
+  const register = useCallback(async (params: LoginParams) => {
+
+    const hashedPassword = hashPassword(params.password);
+
+    try {
+      const response = await api.post<APIResponse<AuthResponse>>(
+        API_ROUTES.AUTH.REGISTER,
+        { username: params.username, password: hashedPassword }
+      );
+      const data = response.data;
+      setIsLoggedIn(true);
+      return response.data;
+    } catch (error) {
+      console.error('register', error);
+    }
   }, []);
 
   const logout = useCallback(async () => {
     await api.post(API_ROUTES.AUTH.LOGOUT);
   }, []);
 
-  const chat = useCallback(async (params: any) => {
-    const response = await api.post<APIResponse<any>>(
+  const chat = useCallback(async (params: unknown) => {
+    const response = await api.post<APIResponse<unknown>>(
       API_ROUTES.MONKEY.CHAT,
       params
     );
     return response.data;
   }, []);
 
-  const upload = useCallback(async (params: any) => {
-    const response = await api.post<APIResponse<any>>(
+  const upload = useCallback(async (params: unknown) => {
+    const response = await api.post<APIResponse<unknown>>(
       API_ROUTES.MONKEY.UPLOAD,
       params
     );
@@ -73,7 +105,7 @@ export default function APIProvider({ children }: { children: React.ReactNode })
 
   const value: APIContextType = {
     login,
-    signup,
+    register,
     logout,
     chat,
     upload,

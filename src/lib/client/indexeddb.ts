@@ -9,10 +9,11 @@ const STORE_KEYS = {
 }
 
 interface UserAuth {
+  session: 'session'; // constant key, only one active session per device
   username: string;
   accessToken: string;
   refreshToken: string;
-  expiresAt: number;
+  expiresAt?: number;
 }
 
 interface User {
@@ -68,7 +69,7 @@ export async function getTokens(): Promise<UserAuth | null> {
   })
 }
 
-export async function setTokens(username: string, accessToken: string, refreshToken: string, expiresAt: number): Promise<void> {
+export async function setTokens(username: string, accessToken: string, refreshToken: string, expiresAt?: number): Promise<void> {
 
   const db = await getDB();
 
@@ -76,11 +77,12 @@ export async function setTokens(username: string, accessToken: string, refreshTo
   const store = transaction.objectStore(STORE_NAMES.AUTH);
 
   const request = store.put({
+    session: STORE_KEYS.AUTH,
     username,
     accessToken,
     refreshToken,
-    expiresAt,
-  }, username);
+    ...(expiresAt && { expiresAt }),
+  });
 
   return new Promise((resolve, reject) => {
     request.onerror = () => reject(request.error);

@@ -34,7 +34,7 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoggedIn) router.push('/');
-  }, [ isLoggedIn ]);
+  }, [ isLoggedIn, router ]);
 
   return (
     <main className={cn(
