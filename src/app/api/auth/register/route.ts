@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 
 import { registerUser } from '@/lib/supabase/user';
-import { getIngress } from '@/lib/api/http';
+import { getIngress } from '@/lib/server/http';
 
 export async function POST(request: NextRequest) {
 

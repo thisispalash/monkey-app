@@ -3,11 +3,11 @@ import { headers } from 'next/headers';
 
 import { verifyUser } from '@/lib/supabase/user';
 import { storeRefreshToken } from '@/lib/supabase/session';
-import { generateAccessToken, generateRefreshToken } from '@/lib/session';
-import { getIngress } from '@/lib/api/http';
+import { generateAccessToken, generateRefreshToken } from '@/lib/server/session';
+import { getIngress } from '@/lib/server/http';
 
 import type { MonkeyUser } from '@/lib/supabase/user';
-import type { User, Ingress } from '@/lib/session';
+import type { User, Ingress } from '@/lib/server/session';
 
 export async function POST(request: NextRequest) {
   const { username, password } = await request.json();

@@ -9,7 +9,7 @@
  * - [ ] handle supabase errors gracefully
  */
 
-import { hashRefreshToken } from '@/lib/api/session';
+import { hashRefreshToken } from '@/lib/server/session';
 import { supabaseAdmin, handleSupabaseError } from './_client';
 
 

@@ -3,10 +3,10 @@ import { headers } from 'next/headers';
 
 import { checkRefreshToken, storeRefreshToken, revokeRefreshToken } from '@/lib/supabase/session';
 import { getUserByUsername } from '@/lib/supabase/user';
-import { generateAccessToken, generateRefreshToken } from '@/lib/session';
-import { getIngress } from '@/lib/api/http';
+import { generateAccessToken, generateRefreshToken } from '@/lib/server/session';
+import { getIngress } from '@/lib/server/http';
 
-import type { User, Ingress } from '@/lib/session';
+import type { User, Ingress } from '@/lib/server/session';
 
 export async function POST(request: NextRequest) {
   const { refreshToken } = await request.json();
