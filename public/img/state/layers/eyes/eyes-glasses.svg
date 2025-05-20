@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <g id="eyes-glasses" fill="none" stroke="#0a0a0a" stroke-width="4">
+    <path d="M183.591 159C186.106 159 188.145 156.314 188.145 153C188.145 149.686 186.106 147 183.591 147C181.075 147 179.036 149.686 179.036 153C179.036 156.314 181.075 159 183.591 159Z" stroke="#0A0A0A" stroke-width="4"/>
+    <path d="M206.363 159C208.878 159 210.918 156.314 210.918 153C210.918 149.686 208.878 147 206.363 147C203.848 147 201.809 149.686 201.809 153C201.809 156.314 203.848 159 206.363 159Z" stroke="#0A0A0A" stroke-width="4"/>
+    <path d="M188.145 153H201.809" stroke="#0A0A0A" stroke-width="4"/>
+    <path d="M179.036 153L176 152" stroke="#0A0A0A" stroke-width="4"/>
+    <path d="M210.917 153L213.954 152" stroke="#0A0A0A" stroke-width="4"/>
+  </g>
+</svg>
