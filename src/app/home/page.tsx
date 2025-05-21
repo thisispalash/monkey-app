@@ -71,7 +71,7 @@ export default function HomePage() {
 
       <select onChange={(e) => setState(e.target.value as keyof typeof states)}>
         {Object.keys(states).map((key) => (
-          <option value={key} className="lowercase">{key}</option>
+          <option value={key} className="lowercase" key={key}>{key}</option>
         ))}
       </select>
 
