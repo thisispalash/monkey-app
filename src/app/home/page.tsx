@@ -72,7 +72,7 @@ export default function HomePage() {
       
       {/* Sidebar */}
       <div className={cn(
-        'h-full w-1/3',
+        'h-full w-1/4',
         'flex flex-col justify-between',
       )}>
 
@@ -104,7 +104,7 @@ export default function HomePage() {
 
       </div>
 
-      <div className="flex h-full w-2/3 overflow-y-auto">
+      <div className="flex h-full w-full overflow-y-auto">
         <Masonry />
       </div>
 
