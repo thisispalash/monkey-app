@@ -63,7 +63,7 @@ export default function Monkey({ monkeyState }: { monkeyState?: string | null })
       'items-center justify-center',
     )}>
 
-      <div className="relative w-56 h-56">
+      <div className="relative size-96">
         <img src="/img/state/layers/body/base-fur.svg"  className="absolute inset-0 w-full h-full object-contain" />
         <img src="/img/state/layers/body/base-face.svg"  className="absolute inset-0 w-full h-full object-contain" />
         <img src="/img/state/layers/body/base-chest.svg"  className="absolute inset-0 w-full h-full object-contain" />
