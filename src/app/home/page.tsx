@@ -1,82 +1,115 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useRef, useState } from 'react';
+import { useAPI } from '@/context/APIContext';
 import cn from '@/lib/cn';
 
-
-const states = {
-  
-  ZEN: <>
-    <img src="/img/state/layers/eyes/eyes-closed.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-smile.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-
-  GLOW: <>
-    <img src="/img/state/layers/eyes/eyes-caret.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-smile.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-
-  ALCOHOL: <>
-    <img src="/img/state/layers/eyes/eyes-spiral.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-zigzag.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-  
-  JITTERS: <>
-    <img src="/img/state/layers/eyes/eyes-wide.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-spiral.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-  
-  OBESE: <>
-    <img src="/img/state/layers/eyes/eyes-small.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-frown.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-  
-  BROKE: <>
-    <img src="/img/state/layers/eyes/eyes-stressed.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-zigzag.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-  
-  FRUGAL: <>
-    <img src="/img/state/layers/eyes/eyes-glasses.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-smile.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-  
-  SMART: <>
-    <img src="/img/state/layers/eyes/eyes-sunglasses.svg"  className="absolute inset-0 w-full h-full object-contain" />
-    <img src="/img/state/layers/mouth/mouth-grin.svg"  className="absolute inset-0 w-full h-full object-contain" />
-  </>,
-}
+import Monkey from '@/component/Monkey';
+import Masonry from '@/component/Masonry';
+import Chat from '@/component/Chat';
 
 export default function HomePage() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [index, setIndex] = useState(0);
+  const [ monkeyState, setMonkeyState ] = useState<string | null>(null);
+  const { upload } = useAPI();
 
-  const [ state, setState ] = useState<keyof typeof states>('ZEN');
+  const handleUploadClick = async () => {
+    fileInputRef.current?.click();
+  };
 
-  return (
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const res = await fetch('/api/monkey/upload-demo', {
+      method: 'POST',
+      body: JSON.stringify({
+        index,
+      }),
+    });
+    const data = await res.json();
+    setMonkeyState(data.state);
+    setIndex(index + 1);
+  }
+
+  return <>
+    
     <div className={cn(
-      'w-full h-full',
-      'flex flex-col gap-4',
-      'items-center justify-center',
+      'w-full h-full overflow-hidden',
+      'flex flex-col justify-between',
+      'md:hidden'
     )}>
+      <div className="flex flex-row justify-between h-1/6">
+        <p className=" font-semibold text-2xl">demo01.dmk</p>
 
-      <div className="relative w-[200px] h-[200px]">
-        <img src="/img/state/layers/body/base-fur.svg"  className="absolute inset-0 w-full h-full object-contain" />
-        <img src="/img/state/layers/body/base-face.svg"  className="absolute inset-0 w-full h-full object-contain" />
-        <img src="/img/state/layers/body/base-chest.svg"  className="absolute inset-0 w-full h-full object-contain" />
-        <img src="/img/state/layers/body/base-ears.svg"  className="absolute inset-0 w-full h-full object-contain" />
-        {states[state]}
+        {/* upload button */}
+        <div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleUpload}
+            multiple
+          />
+          <button
+            onClick={handleUploadClick}
+            className="px-4 py-2 border border-foreground rounded-lg hover:bg-foreground hover:text-background transition-colors"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+      <Monkey monkeyState={monkeyState} />
+      <Chat />
+    </div>
+
+    <div className={cn(
+      'w-full h-full overflow-hidden',
+      'min-h-screen',
+      'flex flex-row gap-4',
+      'hidden md:flex',
+    )}>
+      
+      {/* Sidebar */}
+      <div className={cn(
+        'h-full w-1/3',
+        'flex flex-col justify-between',
+      )}>
+
+        <div className="flex flex-row justify-between h-1/6">
+          <p className=" font-semibold text-2xl">demo01.dmk</p>
+
+          {/* upload button */}
+          <div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleUpload}
+              multiple
+            />
+            <button
+              onClick={handleUploadClick}
+              className="px-4 py-2 border border-foreground rounded-lg hover:bg-foreground hover:text-background transition-colors"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+
+
+        <Monkey monkeyState={monkeyState} />
+
+        <Chat />
+
+      </div>
+
+      <div className="flex h-full w-2/3 overflow-y-auto">
+        <Masonry />
       </div>
 
 
 
-      <select onChange={(e) => setState(e.target.value as keyof typeof states)}>
-        {Object.keys(states).map((key) => (
-          <option value={key} className="lowercase" key={key}>{key}</option>
-        ))}
-      </select>
-
-
-
     </div>
-  );
+  </>;
 }
